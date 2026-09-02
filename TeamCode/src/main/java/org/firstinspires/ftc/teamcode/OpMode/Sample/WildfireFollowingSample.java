@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Sample;
+package org.firstinspires.ftc.teamcode.OpMode.Sample;
 
 import com.github.bouyio.cyancore.util.PIDCoefficients;
 import com.github.bouyio.cyancore.util.PIDController;
