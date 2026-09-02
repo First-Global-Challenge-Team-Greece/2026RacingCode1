@@ -14,7 +14,7 @@ public class Feeder {
     private Telemetry telemetry;
 
     public Feeder(HardwareMap hardwareMap, Telemetry telemetry) {
-        feederMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.feeder_motor_id);
+        feederMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.FEEDER_MOTOR_ID);
         this.telemetry = telemetry;
     }
 

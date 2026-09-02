@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -34,14 +35,14 @@ public class Intake {
     private DigitalChannel intakeRetractionSensor;
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
-        extensionMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.intake_extension_motor_id);
+        extensionMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_EXTENSION_MOTOR_ID);
         extensionMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        intakeMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.intake_motor_id);
+        intakeMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_MOTOR_ID);
 
         if (IntakeConfig.USE_SENSORS) {
-            intakeExtensionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.intake_extension_magnetic_sensor_id);
-            intakeRetractionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.intake_retraction_magnetic_sensor_id);
+            intakeExtensionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.INTAKE_EXTENSION_MAGNETIC_SENSOR_ID);
+            intakeRetractionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.INTAKE_RETRACTION_MAGNETIC_SENSOR_ID);
             intakeExtensionSensor.setMode(DigitalChannel.Mode.INPUT);
             intakeRetractionSensor.setMode(DigitalChannel.Mode.INPUT);
         }
@@ -113,7 +114,7 @@ public class Intake {
     }
 
     public void MANUAL_EXTENSION_INTERFACE(double power) {
-        extensionMotor.setPower(power);
+        extensionMotor.setPower(Range.clip(power, -IntakeConfig.MAX_MOTOR_POWER, IntakeConfig.MAX_MOTOR_POWER));
     }
 
     public double[] getMotorCurrents() {

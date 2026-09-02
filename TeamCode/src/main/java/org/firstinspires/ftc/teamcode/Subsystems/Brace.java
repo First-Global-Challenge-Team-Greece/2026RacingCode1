@@ -4,38 +4,66 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Config.BraceConfig;
 import org.firstinspires.ftc.teamcode.Config.HardwareMapConfig;
-import org.firstinspires.ftc.teamcode.Config.IntakeConfig;
 
 public class Brace {
     private final DcMotorEx braceMotor;
     private final CRServo leftBraceExtensionServo;
     private final CRServo rightBraceExtensionServo;
 
-    public Brace(HardwareMap hardwareMap) {
-        braceMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.brace_motor_id);
+    private TouchSensor lowerExtensionLimitSensor;
+    private TouchSensor upperExtensionLimitSensor;
 
-        leftBraceExtensionServo = hardwareMap.get(CRServo.class, HardwareMapConfig.left_brace_continuous_servo_id);
-        rightBraceExtensionServo = hardwareMap.get(CRServo.class, HardwareMapConfig.right_brace_continuous_servo_id);
+    private boolean extensionStatus = false;
+
+    public Brace(HardwareMap hardwareMap) {
+        braceMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.BRACE_MOTOR_ID);
+
+        leftBraceExtensionServo = hardwareMap.get(CRServo.class, HardwareMapConfig.LEFT_BRACE_CONTINUOUS_SERVO_ID);
+        rightBraceExtensionServo = hardwareMap.get(CRServo.class, HardwareMapConfig.RIGHT_BRACE_CONTINUOUS_SERVO_ID);
         rightBraceExtensionServo.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        if (BraceConfig.USE_SENSORS) {
+            lowerExtensionLimitSensor = hardwareMap.get(TouchSensor.class, HardwareMapConfig.LOWER_BRACE_EXTENSION_SENSOR_ID);
+            upperExtensionLimitSensor = hardwareMap.get(TouchSensor.class, HardwareMapConfig.UPPER_BRACE_EXTENSION_SENSOR_ID);
+        }
     }
 
     public void extend() {
-        leftBraceExtensionServo.setPower(IntakeConfig.MAX_MOTOR_POWER);
-        rightBraceExtensionServo.setPower(IntakeConfig.MAX_MOTOR_POWER);
+        extensionStatus = true;
     }
     public void retract() {
-        leftBraceExtensionServo.setPower(-IntakeConfig.MAX_MOTOR_POWER);
-        rightBraceExtensionServo.setPower(-IntakeConfig.MAX_MOTOR_POWER);
+        extensionStatus = false;
     }
-    public void stop() {
+
+    public void extensionStateMachine() {
+        if (extensionStatus && !upperExtensionLimitSensor.isPressed()) {
+            leftBraceExtensionServo.setPower(BraceConfig.MAX_CONTINUOUS_SERVO_POWER);
+            rightBraceExtensionServo.setPower(BraceConfig.MAX_CONTINUOUS_SERVO_POWER);
+            return;
+        }
+
+        if (!extensionStatus && !lowerExtensionLimitSensor.isPressed()) {
+            leftBraceExtensionServo.setPower(-BraceConfig.MAX_CONTINUOUS_SERVO_POWER);
+            rightBraceExtensionServo.setPower(-BraceConfig.MAX_CONTINUOUS_SERVO_POWER);
+            return;
+        }
+
         leftBraceExtensionServo.setPower(0);
         rightBraceExtensionServo.setPower(0);
     }
 
+    public void EXTENSION_INTERFACE(double power) {
+        leftBraceExtensionServo.setPower(Range.clip(power, -BraceConfig.MAX_CONTINUOUS_SERVO_POWER, BraceConfig.MAX_CONTINUOUS_SERVO_POWER));
+        rightBraceExtensionServo.setPower(Range.clip(power, -BraceConfig.MAX_CONTINUOUS_SERVO_POWER, BraceConfig.MAX_CONTINUOUS_SERVO_POWER));
+    }
+
     public void climb() {
-        braceMotor.setPower(IntakeConfig.MAX_MOTOR_POWER);
+        braceMotor.setPower(BraceConfig.MAX_MOTOR_POWER);
     }
 
     public void stall() {
