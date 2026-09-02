@@ -11,6 +11,7 @@ import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kS;
 import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kV;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig;
 
 public abstract class FlywheelShooter {
     public enum ShooterState {
@@ -18,6 +19,10 @@ public abstract class FlywheelShooter {
     }
 
     protected ShooterState shooterState = ShooterState.STALLED;
+
+    protected final ShooterBallCounter shooterBallCounter = new ShooterBallCounter(RPM_DROP_COUNT_THRESHOLD);
+
+    protected int shootCount = 0;
 
     protected void setVelocity(double velocity) {
         double feedForward = (kV * velocity) + kS * Math.signum(velocity);
@@ -75,10 +80,16 @@ public abstract class FlywheelShooter {
         shooterState = ShooterState.STALLED;
     }
 
+    public void updateBallCounts() {
+        shooterBallCounter.updateCount(getVelocity());
+        shootCount = shooterBallCounter.getBallCount();
+    }
+
     public void debug(Telemetry telemetry) {
         telemetry.addData("Current Velocity", getVelocity());
         telemetry.addData("Is Shooter RPM Ready", isShooterRpmReady());
         telemetry.addData("Shooter State", shooterState);
+        telemetry.addData("Shoot Count", shootCount);
     }
 
     public boolean isReady() {

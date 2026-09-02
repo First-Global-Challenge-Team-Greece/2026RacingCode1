@@ -13,6 +13,8 @@ public class FlywheelShooterConfig {
     public static double STALLED_VELOCITY = 0;
     public static double RPM_THRESHOLD = 3000;
 
+    public static double RPM_DROP_COUNT_THRESHOLD = 200;
+
     public static double TUNING_VELOCITY = 2000;
 
     public static double kP = 0.007;
