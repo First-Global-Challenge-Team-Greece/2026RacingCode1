@@ -1,0 +1,91 @@
+package org.firstinspires.ftc.teamcode.Subsystems;
+
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.*;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.IDLE_VELOCITY;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.RPM_THRESHOLD;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.SHOOTING_VELOCITY;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.STALLED_VELOCITY;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.TUNING_VELOCITY;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kP;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kS;
+import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kV;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+public abstract class FlywheelShooter {
+    public enum ShooterState {
+        STALLED, CHARGING, READY, IDLE
+    }
+
+    protected ShooterState shooterState = ShooterState.STALLED;
+
+    protected void setVelocity(double velocity) {
+        double feedForward = (kV * velocity) + kS * Math.signum(velocity);
+        double error = velocity - getVelocity();
+        double feedBack = error * kP;
+
+        applyPower(feedBack + feedForward);
+    }
+
+    abstract void applyPower(double velocity);
+    abstract double getVelocity();
+
+    protected boolean isShooterRpmReady() {
+        return getVelocity() > RPM_THRESHOLD;
+    }
+
+    public ShooterState getShooterState() {
+        return shooterState;
+    }
+
+    public void shooterStateMachine() {
+        switch (shooterState) {
+            case STALLED:
+                setVelocity(STALLED_VELOCITY);
+                break;
+            case IDLE:
+                setVelocity(IDLE_VELOCITY);
+                break;
+            case CHARGING:
+                setVelocity(SHOOTING_VELOCITY);
+                if (isShooterRpmReady()) {
+                    shooterState = ShooterState.READY;
+                }
+                break;
+            case READY:
+                setVelocity(SHOOTING_VELOCITY);
+                if (!isShooterRpmReady()) {
+                    shooterState = ShooterState.CHARGING;
+                }
+                break;
+        }
+    }
+
+    public void shoot() {
+        if (shooterState != ShooterState.READY) {
+            shooterState = ShooterState.CHARGING;
+        }
+    }
+
+    public void idle() {
+        shooterState = ShooterState.IDLE;
+    }
+
+    public void stop() {
+        shooterState = ShooterState.STALLED;
+    }
+
+    public void debug(Telemetry telemetry) {
+        telemetry.addData("Current Velocity", getVelocity());
+        telemetry.addData("Is Shooter RPM Ready", isShooterRpmReady());
+        telemetry.addData("Shooter State", shooterState);
+    }
+
+    public boolean isReady() {
+        return shooterState == ShooterState.READY;
+    }
+
+    public void tune() {
+        setVelocity(TUNING_VELOCITY);
+    }
+}
