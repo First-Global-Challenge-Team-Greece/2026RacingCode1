@@ -51,6 +51,7 @@ public class DriverAlertSample extends OpMode {
     public void loop() {
         Optional<AprilTagDetection> closestTag = tagCamera.getClosestDetection();
         boolean closestTagExists = closestTag.isPresent();
+
         int id = closestTagExists ? closestTag.get().id : -1;
         double distance = closestTagExists ? closestTag.get().ftcPose.range : -1;
         double bearing = closestTagExists ? closestTag.get().ftcPose.bearing : 0;

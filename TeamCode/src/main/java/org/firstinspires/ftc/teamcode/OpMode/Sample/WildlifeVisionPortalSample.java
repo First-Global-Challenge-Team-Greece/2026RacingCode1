@@ -27,19 +27,22 @@ public class WildlifeVisionPortalSample extends OpMode {
 
     @Override
     public void loop() {
+        double[] frameLumaValues = wildfireCamera.getLumaValues();
 
         telemetry.addLine(TelemetryDivider.generate("Unscaled Luma", 10));
-        telemetry.addData("Left Lower Luma", wildfireCamera.getLumaValues()[WildfireCamera.LEFT_LOWER_SECTION_ID]);
-        telemetry.addData("Left Upper Luma", wildfireCamera.getLumaValues()[WildfireCamera.LEFT_UPPER_SECTION_ID]);
-        telemetry.addData("Right Lower Luma", wildfireCamera.getLumaValues()[WildfireCamera.RIGHT_LOWER_SECTION_ID]);
-        telemetry.addData("Right Upper Luma", wildfireCamera.getLumaValues()[WildfireCamera.RIGHT_UPPER_SECTION_ID]);
+        telemetry.addData("Left Lower Luma", frameLumaValues[WildfireCamera.LEFT_LOWER_SECTION_ID]);
+        telemetry.addData("Left Upper Luma", frameLumaValues[WildfireCamera.LEFT_UPPER_SECTION_ID]);
+        telemetry.addData("Right Lower Luma", frameLumaValues[WildfireCamera.RIGHT_LOWER_SECTION_ID]);
+        telemetry.addData("Right Upper Luma", frameLumaValues[WildfireCamera.RIGHT_UPPER_SECTION_ID]);
         telemetry.addLine();
 
+        double[] frameScaledLumaValues = wildfireCamera.getScaledLumaValues();
+
         telemetry.addLine(TelemetryDivider.generate("Scaled Luma", 10));
-        telemetry.addData("Left Lower Luma", wildfireCamera.getScaledLumaValues()[WildfireCamera.LEFT_LOWER_SECTION_ID]);
-        telemetry.addData("Left Upper Luma", wildfireCamera.getScaledLumaValues()[WildfireCamera.LEFT_UPPER_SECTION_ID]);
-        telemetry.addData("Right Lower Luma", wildfireCamera.getScaledLumaValues()[WildfireCamera.RIGHT_LOWER_SECTION_ID]);
-        telemetry.addData("Right Upper Luma", wildfireCamera.getScaledLumaValues()[WildfireCamera.RIGHT_UPPER_SECTION_ID]);
+        telemetry.addData("Left Lower Luma", frameScaledLumaValues[WildfireCamera.LEFT_LOWER_SECTION_ID]);
+        telemetry.addData("Left Upper Luma", frameScaledLumaValues[WildfireCamera.LEFT_UPPER_SECTION_ID]);
+        telemetry.addData("Right Lower Luma", frameScaledLumaValues[WildfireCamera.RIGHT_LOWER_SECTION_ID]);
+        telemetry.addData("Right Upper Luma", frameScaledLumaValues[WildfireCamera.RIGHT_UPPER_SECTION_ID]);
 
 
     }

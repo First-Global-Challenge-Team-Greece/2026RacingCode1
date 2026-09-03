@@ -18,7 +18,7 @@ public class WildfireFollowingSample extends OpMode {
     private DcMotorEx leftMotor;
     private DcMotorEx rightMotor;
 
-    private PIDController autotargetPID;
+    private PIDController autoTargetPID;
     private PIDCoefficients autoTargetCoefficients;
     private PIDController autoDrivePID;
     private PIDCoefficients autoDriveCoefficients;
@@ -34,7 +34,7 @@ public class WildfireFollowingSample extends OpMode {
         rightMotor.setDirection(TankDriveConfig.RIGHT_MOTOR_DIRECTION);
 
         autoTargetCoefficients = new PIDCoefficients(TankDriveConfig.AUTO_TARGET_KP, TankDriveConfig.AUTO_TARGET_KI, TankDriveConfig.AUTO_TARGET_KD);
-        autotargetPID = new PIDController(autoTargetCoefficients);
+        autoTargetPID = new PIDController(autoTargetCoefficients);
 
         autoDriveCoefficients = new PIDCoefficients(TankDriveConfig.AUTO_DRIVE_KP, TankDriveConfig.AUTO_DRIVE_KI, TankDriveConfig.AUTO_DRIVE_KD);
         autoDrivePID = new PIDController(autoDriveCoefficients);
@@ -60,7 +60,7 @@ public class WildfireFollowingSample extends OpMode {
                 (frame[WildfireCamera.LEFT_LOWER_SECTION_ID] + frame[WildfireCamera.RIGHT_LOWER_SECTION_ID]) / 2
                         - (frame[WildfireCamera.LEFT_UPPER_SECTION_ID] + frame[WildfireCamera.RIGHT_UPPER_SECTION_ID]) / 2;
 
-        double turnPower = autotargetPID.update(turnError);
+        double turnPower = autoTargetPID.update(turnError);
         double drivePower = autoDrivePID.update(driveError);
 
         leftMotor.setPower(drivePower + turnPower);
