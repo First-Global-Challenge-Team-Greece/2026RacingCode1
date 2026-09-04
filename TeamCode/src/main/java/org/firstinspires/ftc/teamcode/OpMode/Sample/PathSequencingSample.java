@@ -4,12 +4,14 @@ import com.github.bouyio.cyancore.debugger.Debuggers;
 import com.github.bouyio.cyancore.geomery.Point;
 import com.github.bouyio.cyancore.pathing.Path;
 import com.github.bouyio.cyancore.pathing.PathSequence;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Subsystems.TankDrive;
 
-@TeleOp()
+@Disabled
+@TeleOp(group = "Cyan Samples", name = "Path sequencing")
 public class PathSequencingSample extends OpMode {
 
     private TankDrive tankDrive;
@@ -36,6 +38,8 @@ public class PathSequencingSample extends OpMode {
     @Override
     public void init() {
         tankDrive = new TankDrive(hardwareMap, telemetry, TankDrive.DriveMode.FIELD_CENTRIC);
+
+        // Required for cyan Debugging
         Debuggers.init();
 
         seq = new PathSequence(

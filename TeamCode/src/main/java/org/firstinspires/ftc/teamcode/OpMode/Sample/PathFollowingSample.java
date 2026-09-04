@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.OpMode.Sample;
 import com.github.bouyio.cyancore.debugger.Debuggers;
 import com.github.bouyio.cyancore.geomery.Point;
 import com.github.bouyio.cyancore.pathing.Path;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Subsystems.TankDrive;
 
-@TeleOp()
+@Disabled
+@TeleOp(group = "Cyan Samples", name = "Path Following")
 public class PathFollowingSample extends OpMode {
 
     private TankDrive tankDrive;

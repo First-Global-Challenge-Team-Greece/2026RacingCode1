@@ -49,9 +49,9 @@ public class TankDriveConfig {
     public static double ENCODER_CPR = 28;
     public static double GEAR_RATIO = 12;
 
-    public static double WHEEL_RADIUS = 4.5;
+    public static double WHEEL_RADIUS_CM = 4.5;
 
-    public static double TICKS_TO_CM = 2 * Math.PI * WHEEL_RADIUS / (ENCODER_CPR * GEAR_RATIO);
+    public static double TICKS_TO_CM = 2 * Math.PI * WHEEL_RADIUS_CM / (ENCODER_CPR * GEAR_RATIO);
 
     public static boolean AUTONOMOUS_DRIVE_ENABLED = false;
 

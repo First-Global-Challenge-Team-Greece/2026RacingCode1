@@ -66,7 +66,7 @@ public class TankDrive {
         this.driveMode = driveMode;
 
         exporter = new TelemetryExporter(telemetry, 50);
-        if (driveMode == DriveMode.FIELD_CENTRIC) {
+        if (driveMode == DriveMode.FIELD_CENTRIC || TankDriveConfig.AUTONOMOUS_DRIVE_ENABLED) {
             if (TankDriveConfig.ROBOT_IMU_TYPE == TankDriveConfig.ImuType.BHI260)
                 imu = hardwareMap.get(BHI260IMU.class, HardwareMapConfig.IMU_ID);
             else
