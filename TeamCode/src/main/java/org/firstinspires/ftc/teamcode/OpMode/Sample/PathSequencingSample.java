@@ -42,7 +42,8 @@ public class PathSequencingSample extends OpMode {
                 tankDrive.getOdometry(),
                 4,
                 p1,
-                p2);
+                p2,
+                p3);
     }
 
     @Override

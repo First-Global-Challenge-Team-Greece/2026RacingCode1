@@ -17,7 +17,6 @@ public class PointFollowingSample extends OpMode {
     @Override
     public void init() {
         tankDrive = new TankDrive(hardwareMap, telemetry, TankDrive.DriveMode.FIELD_CENTRIC);
-        Debuggers.init();
     }
 
     @Override
