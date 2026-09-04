@@ -54,4 +54,11 @@ public class TankDriveConfig {
     public static double TICKS_TO_CM = 2 * Math.PI * WHEEL_RADIUS / (ENCODER_CPR * GEAR_RATIO);
 
     public static boolean AUTONOMOUS_DRIVE_ENABLED = false;
+
+    public static final ImuOrientationOnRobot IMU_ORIENTATION_ON_ROBOT =
+            new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                    RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+            );
+
 }
