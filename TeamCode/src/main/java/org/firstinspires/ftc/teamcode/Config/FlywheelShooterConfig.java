@@ -25,7 +25,7 @@ public class FlywheelShooterConfig {
     public static DcMotorSimple.Direction FLYWHEEL_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
 
     // ----DUAL MOTOR FLYWHEEL CONFIG----
-    public static DcMotorSimple.Direction LEFT_FLYWHEEL_MOTOR_DIRECTION = DcMotorSimple.Direction.REVERSE;
-    public static DcMotorSimple.Direction RIGHT_FLYWHEEL_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static DcMotorSimple.Direction LEFT_FLYWHEEL_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static DcMotorSimple.Direction RIGHT_FLYWHEEL_MOTOR_DIRECTION = DcMotorSimple.Direction.REVERSE;
 
 }
