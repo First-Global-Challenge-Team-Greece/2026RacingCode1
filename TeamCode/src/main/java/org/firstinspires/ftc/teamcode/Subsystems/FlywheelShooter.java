@@ -32,6 +32,7 @@ public abstract class FlywheelShooter {
         applyPower(feedBack + feedForward);
     }
 
+    abstract void shutdown();
     abstract void applyPower(double velocity);
     abstract double getVelocity();
 
