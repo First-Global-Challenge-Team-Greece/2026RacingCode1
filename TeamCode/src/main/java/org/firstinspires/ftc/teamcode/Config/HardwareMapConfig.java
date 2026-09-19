@@ -4,4 +4,10 @@ public class HardwareMapConfig {
 
     public static final String LEFT_SHOOTER_MOTOR_ID = "lsm";
     public static final String RIGHT_SHOOTER_MOTOR_ID = "rsm";
+    public static final String WEBCAM_ID = "webcam";
+
+    public static final String LEFT_DRIVE_MOTOR_ID = "ldm";
+    public static final String RIGHT_DRIVE_MOTOR_ID = "rdm";
+
+    public static final String IMU_ID = "imu";
 }
