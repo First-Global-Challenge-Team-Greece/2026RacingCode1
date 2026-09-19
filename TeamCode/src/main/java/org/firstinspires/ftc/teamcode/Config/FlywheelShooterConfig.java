@@ -17,9 +17,9 @@ public class FlywheelShooterConfig {
 
     public static double TUNING_VELOCITY = 2000;
 
-    public static double kP = 0.007;
-    public static double kV = 0.0001795;
-    public static double kS = 0.1;
+    public static double KP = 0.007;
+    public static double KV = 0.0001795;
+    public static double KS = 0.1;
 
     // ----SINGLE MOTOR FLYWHEEL CONFIG----
     public static DcMotorSimple.Direction FLYWHEEL_MOTOR_DIRECTION = DcMotorSimple.Direction.FORWARD;

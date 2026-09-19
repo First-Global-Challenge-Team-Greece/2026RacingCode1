@@ -1,15 +1,5 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.*;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.IDLE_VELOCITY;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.RPM_THRESHOLD;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.SHOOTING_VELOCITY;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.STALLED_VELOCITY;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.TUNING_VELOCITY;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kP;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kS;
-import static org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig.kV;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Config.FlywheelShooterConfig;
 
@@ -20,24 +10,24 @@ public abstract class FlywheelShooter {
 
     protected ShooterState shooterState = ShooterState.STALLED;
 
-    protected final ShooterBallCounter shooterBallCounter = new ShooterBallCounter(RPM_DROP_COUNT_THRESHOLD);
+    protected final ShooterBallCounter shooterBallCounter = new ShooterBallCounter(FlywheelShooterConfig.RPM_DROP_COUNT_THRESHOLD);
 
     protected int shootCount = 0;
 
     protected void setVelocity(double velocity) {
-        double feedForward = (kV * velocity) + kS * Math.signum(velocity);
+        double feedForward = (FlywheelShooterConfig.KV * velocity) + FlywheelShooterConfig.KS * Math.signum(velocity);
         double error = velocity - getVelocity();
-        double feedBack = error * kP;
+        double feedBack = error * FlywheelShooterConfig.KP;
 
         applyPower(feedBack + feedForward);
     }
 
     abstract void shutdown();
-    abstract void applyPower(double velocity);
+    abstract void applyPower(double power);
     abstract double getVelocity();
 
     protected boolean isShooterRpmReady() {
-        return getVelocity() > RPM_THRESHOLD;
+        return getVelocity() > FlywheelShooterConfig.RPM_THRESHOLD;
     }
 
     public ShooterState getShooterState() {
@@ -45,21 +35,23 @@ public abstract class FlywheelShooter {
     }
 
     public void shooterStateMachine() {
+
+        updateBallCounts();
         switch (shooterState) {
             case STALLED:
-                setVelocity(STALLED_VELOCITY);
+                setVelocity(FlywheelShooterConfig.STALLED_VELOCITY);
                 break;
             case IDLE:
-                setVelocity(IDLE_VELOCITY);
+                setVelocity(FlywheelShooterConfig.IDLE_VELOCITY);
                 break;
             case CHARGING:
-                setVelocity(SHOOTING_VELOCITY);
+                setVelocity(FlywheelShooterConfig.SHOOTING_VELOCITY);
                 if (isShooterRpmReady()) {
                     shooterState = ShooterState.READY;
                 }
                 break;
             case READY:
-                setVelocity(SHOOTING_VELOCITY);
+                setVelocity(FlywheelShooterConfig.SHOOTING_VELOCITY);
                 if (!isShooterRpmReady()) {
                     shooterState = ShooterState.CHARGING;
                 }
@@ -81,8 +73,10 @@ public abstract class FlywheelShooter {
         shooterState = ShooterState.STALLED;
     }
 
-    public void updateBallCounts() {
-        shooterBallCounter.updateCount(getVelocity());
+    private  void updateBallCounts() {
+        if (shooterState == ShooterState.READY || shooterState == ShooterState.CHARGING) {
+            shooterBallCounter.updateCount(getVelocity());
+        }
         shootCount = shooterBallCounter.getBallCount();
     }
 
@@ -98,6 +92,6 @@ public abstract class FlywheelShooter {
     }
 
     public void tune() {
-        setVelocity(TUNING_VELOCITY);
+        setVelocity(FlywheelShooterConfig.TUNING_VELOCITY);
     }
 }

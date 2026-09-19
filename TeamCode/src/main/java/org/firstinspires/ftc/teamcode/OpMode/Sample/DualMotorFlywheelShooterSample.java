@@ -24,7 +24,7 @@ public class DualMotorFlywheelShooterSample extends OpMode {
         }
 
         if (gamepad1.bWasPressed()) {
-            shooter.shoot();
+            shooter.stop();
         }
 
         if (gamepad1.xWasPressed()) {

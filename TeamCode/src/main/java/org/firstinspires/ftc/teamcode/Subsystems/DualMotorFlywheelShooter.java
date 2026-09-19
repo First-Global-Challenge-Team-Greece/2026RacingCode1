@@ -18,8 +18,8 @@ public class DualMotorFlywheelShooter extends FlywheelShooter {
     private boolean isActive = true;
 
     public DualMotorFlywheelShooter(HardwareMap hardwareMap, Telemetry telemetry) {
-        leftShooterMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.left_shooter_motor_id);
-        rightShooterMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.right_shooter_motor_id);
+        leftShooterMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.LEFT_SHOOTER_MOTOR_ID);
+        rightShooterMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.RIGHT_SHOOTER_MOTOR_ID);
         leftShooterMotor.setDirection(FlywheelShooterConfig.LEFT_FLYWHEEL_MOTOR_DIRECTION);
         rightShooterMotor.setDirection(FlywheelShooterConfig.RIGHT_FLYWHEEL_MOTOR_DIRECTION);
 
