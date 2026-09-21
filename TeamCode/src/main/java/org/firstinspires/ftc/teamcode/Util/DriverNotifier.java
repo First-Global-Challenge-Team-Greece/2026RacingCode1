@@ -83,6 +83,8 @@ public class DriverNotifier {
      * @param durationMS the duration of the notification. (Milliseconds)
      * */
     public void createStereoNotification(int durationMS) {
+        validateInput(durationMS);
+
         if ((long) (System.currentTimeMillis() - previousNotificationTime) < minimumDeltaTime) {
             return;
         }
@@ -104,6 +106,8 @@ public class DriverNotifier {
      * @param notificationChannel the specified channel of the notification.
      * */
     public void createMonoNotification(Channel notificationChannel, int durationMS) {
+        validateInput(durationMS);
+
         if (System.currentTimeMillis() - previousNotificationTime < minimumDeltaTime)
             return;
 
@@ -134,6 +138,7 @@ public class DriverNotifier {
         minimumDeltaTime = rumblePaddingMS;
 
         for (Gamepad.RumbleEffect.Step patternStep : pattern.steps) {
+            validateInput(patternStep.duration);
             minimumDeltaTime += patternStep.duration;
         }
 
@@ -154,6 +159,18 @@ public class DriverNotifier {
      * */
     public void sendMessage(MessageLevel messageLevel) {
         createPatternNotification(messageLevel.pattern);
+    }
+
+    private void validateInput(int input) {
+        if (input <= 0) {
+            throw new IllegalArgumentException("Input must be a positive integer.");
+        }
+    }
+
+    private void validateStepDuration(int duration) {
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Step duration must be a positive integer.");
+        }
     }
 
 }

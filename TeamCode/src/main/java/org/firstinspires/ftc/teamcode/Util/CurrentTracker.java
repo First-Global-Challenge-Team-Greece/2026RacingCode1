@@ -95,10 +95,13 @@ public class CurrentTracker {
     }
 
     /**
-     * Adds the current measurements to telemetry.
+     * Prints the current measurements to telemetry.
+     *
+     * @apiNote Call {@link CurrentTracker#update()} before calling this method.
      */
-    public void addTelemetry(Telemetry telemetry) {
+    public void printToTelemetry(Telemetry telemetry) {
         telemetry.addLine("--- Motor Current Tracker ---");
+        telemetry.addLine();
 
         for (String motorName : motors.keySet()) {
             telemetry.addData(
@@ -108,6 +111,7 @@ public class CurrentTracker {
             telemetry.addData(
                     motorName + " Max Current (A)",
                     maxCurrentByMotor.get(motorName));
+            telemetry.addLine();
         }
 
         telemetry.addLine("-----------------------------");
