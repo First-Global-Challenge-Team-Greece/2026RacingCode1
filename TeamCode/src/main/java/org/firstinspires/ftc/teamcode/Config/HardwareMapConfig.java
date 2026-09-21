@@ -7,8 +7,9 @@ public class HardwareMapConfig {
     public final static String INTAKE_MOTOR_ID = "im";
 
     public final static String INTAKE_EXTENSION_MAGNETIC_SENSOR_ID = "iems";
-    public final static String INTAKE_RETRACTION_MAGNETIC_SENSOR_ID = "irms";
 
+    public static final String RIGHT_MIXER_CONTINUOUS_SERVO_ID = "rmcr";
+    public static final String LEFT_MIXER_CONTINUOUS_SERVO_ID = "lmcr";
 
     public static final String FEEDER_MOTOR_ID = "fm";
 

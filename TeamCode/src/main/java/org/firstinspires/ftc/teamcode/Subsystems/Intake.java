@@ -34,11 +34,11 @@ public class Intake {
         extensionMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_MOTOR_ID);
         extensionMotor.setDirection(IntakeConfig.INTAKE_DIRECTION);
 
-        intakeMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_MOTOR_ID);
-        intakeMotor.setDirection(IntakeConfig.INTAKE_DIRECTION);
+        intakeMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_EXTENSION_MOTOR_ID);
+        intakeMotor.setDirection(IntakeConfig.EXTENSION_DIRECTION);
 
         if (IntakeConfig.USE_SENSORS) {
-            intakeExtensionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.INTAKE_MOTOR_ID);
+            intakeExtensionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.INTAKE_EXTENSION_MAGNETIC_SENSOR_ID);
             intakeExtensionSensor.setMode(DigitalChannel.Mode.INPUT);
         }
 
