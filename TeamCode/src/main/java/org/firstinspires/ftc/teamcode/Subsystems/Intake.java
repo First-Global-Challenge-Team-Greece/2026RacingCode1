@@ -9,6 +9,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Config.HardwareMapConfig;
 import org.firstinspires.ftc.teamcode.Config.IntakeConfig;
 
+import java.util.IllegalFormatFlagsException;
+
 public class Intake {
 
 
@@ -62,7 +64,9 @@ public class Intake {
         isActive = !hasShutdown;
     }
 
-    public void extensionStateManager() {
+    public void updateExtension() {
+        if (!IntakeConfig.USE_SENSORS) throw new IllegalFormatFlagsException("Sensors must be enabled to use this method!");
+
         if (!isActive) return;
 
         telemetry.addLine("State Manager Run");
@@ -74,7 +78,7 @@ public class Intake {
         else stopExtension();
     }
 
-    public void intakeStateManager() {
+    public void updateIntake() {
         if (!isActive) intakeState = IntakeState.STOPPED;
 
         switch (intakeState) {
@@ -106,9 +110,6 @@ public class Intake {
         extensionMotor.setPower(IntakeConfig.MAX_MOTOR_POWER);
     }
 
-    public void retract() {
-        extensionMotor.setPower(-IntakeConfig.MAX_MOTOR_POWER);
-    }
 
     public void stopExtension() {
         extensionMotor.setPower(0);
@@ -121,6 +122,8 @@ public class Intake {
         hasShutdown = true;
     }
 
+    /**Used only for debug purposes. DO NOT USE IN PRODUCTION!*/
+    @Deprecated
     public void MANUAL_EXTENSION_INTERFACE(double power) {
         extensionMotor.setPower(power);
     }

@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.Config;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class    IntakeConfig {
+@Config
+public class IntakeConfig {
     public static double MAX_MOTOR_POWER = 0.8;
     public static boolean USE_SENSORS = false;
 
