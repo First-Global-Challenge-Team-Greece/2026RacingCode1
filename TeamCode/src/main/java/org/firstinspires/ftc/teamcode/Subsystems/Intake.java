@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -13,15 +11,11 @@ import org.firstinspires.ftc.teamcode.Config.IntakeConfig;
 
 public class Intake {
 
-    public enum ExtensionState {
-        EXTENDED, RETRACTED
-    }
 
     public enum IntakeState {
         COLLECTING, DROPPING, STOPPED
     }
 
-    private ExtensionState extensionState = ExtensionState.RETRACTED;
     private IntakeState intakeState = IntakeState.STOPPED;
 
 
@@ -32,19 +26,20 @@ public class Intake {
     private final DcMotorEx intakeMotor;
 
     private DigitalChannel intakeExtensionSensor;
-    private DigitalChannel intakeRetractionSensor;
+
+    private boolean isActive = false;
+    private boolean hasShutdown = false;
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
-        extensionMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_EXTENSION_MOTOR_ID);
-        extensionMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        extensionMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_MOTOR_ID);
+        extensionMotor.setDirection(IntakeConfig.INTAKE_DIRECTION);
 
         intakeMotor = hardwareMap.get(DcMotorEx.class, HardwareMapConfig.INTAKE_MOTOR_ID);
+        intakeMotor.setDirection(IntakeConfig.INTAKE_DIRECTION);
 
         if (IntakeConfig.USE_SENSORS) {
-            intakeExtensionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.INTAKE_EXTENSION_MAGNETIC_SENSOR_ID);
-            intakeRetractionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.INTAKE_RETRACTION_MAGNETIC_SENSOR_ID);
+            intakeExtensionSensor = hardwareMap.get(DigitalChannel.class, HardwareMapConfig.INTAKE_MOTOR_ID);
             intakeExtensionSensor.setMode(DigitalChannel.Mode.INPUT);
-            intakeRetractionSensor.setMode(DigitalChannel.Mode.INPUT);
         }
 
         this.telemetry = telemetry;
@@ -62,36 +57,26 @@ public class Intake {
         intakeMotor.setPower(0);
     }
 
-    public void extend() {
-        extensionState = ExtensionState.EXTENDED;
-    }
 
-    public void retract() {
-        extensionState = ExtensionState.RETRACTED;
+    public void startMatch() {
+        isActive = !hasShutdown;
     }
 
     public void extensionStateManager() {
-        switch (extensionState) {
-            case EXTENDED:
-                if (intakeExtensionSensor.getState()) {
-                    extensionMotor.setPower(0);
-                    break;
-                }
+        if (!isActive) return;
 
-                extensionMotor.setPower(IntakeConfig.MAX_MOTOR_POWER);
-                break;
-            case RETRACTED:
-                if (intakeRetractionSensor.getState()) {
-                    extensionMotor.setPower(0);
-                    break;
-                }
+        telemetry.addLine("State Manager Run");
 
-                extensionMotor.setPower(-IntakeConfig.MAX_MOTOR_POWER);
-                break;
+        if (intakeExtensionSensor.getState()) {
+            extend();
+            telemetry.addLine("Extended");
         }
+        else stopExtension();
     }
 
     public void intakeStateManager() {
+        if (!isActive) intakeState = IntakeState.STOPPED;
+
         switch (intakeState) {
             case STOPPED:
                 stop();
@@ -109,12 +94,35 @@ public class Intake {
         this.intakeState = intakeState;
     }
 
+    public boolean isIntakeStalled() {
+        return intakeMotor.getVelocity() == 0 && intakeState != IntakeState.STOPPED;
+    }
+
     public IntakeState getIntakeState() {
         return intakeState;
     }
 
+    public void extend() {
+        extensionMotor.setPower(IntakeConfig.MAX_MOTOR_POWER);
+    }
+
+    public void retract() {
+        extensionMotor.setPower(-IntakeConfig.MAX_MOTOR_POWER);
+    }
+
+    public void stopExtension() {
+        extensionMotor.setPower(0);
+    }
+
+    public void shutdown() {
+        intakeMotor.close();
+        extensionMotor.close();
+
+        hasShutdown = true;
+    }
+
     public void MANUAL_EXTENSION_INTERFACE(double power) {
-        extensionMotor.setPower(Range.clip(power, -IntakeConfig.MAX_MOTOR_POWER, IntakeConfig.MAX_MOTOR_POWER));
+        extensionMotor.setPower(power);
     }
 
     public double[] getMotorCurrents() {
@@ -128,5 +136,7 @@ public class Intake {
         telemetry.addLine("|----- Intake -----|");
         telemetry.addData("Intake Current", intakeMotor.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("Extension Current", extensionMotor.getCurrent(CurrentUnit.AMPS));
+
+        telemetry.addData("Sensor status", intakeExtensionSensor.getState());
     }
 }
