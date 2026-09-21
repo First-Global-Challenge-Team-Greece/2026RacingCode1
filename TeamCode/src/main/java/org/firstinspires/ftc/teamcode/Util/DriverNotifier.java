@@ -34,6 +34,10 @@ public class DriverNotifier {
      * Preprogrammed controller messages for specific purposes.
      * */
     public enum MessageLevel {
+        /**Shall be used when an action/command has been completed.*/
+        ACTION_COMPLETED(new Gamepad.RumbleEffect.Builder().addStep(1, 1, 100).addStep(1, 1, 200).build()),
+        /**Shall be used when an action/command is queued.*/
+        ACTION_QUEUED(new Gamepad.RumbleEffect.Builder().addStep(1, 1, 200).build()),
         /**Shall be used when communicating internal warnings.*/
         WARNING(new Gamepad.RumbleEffect.Builder().addStep(1, 0, 300).addStep(0, 1, 300).build()),
         /**Shall be used when communicating internal errors.*/
