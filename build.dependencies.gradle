@@ -1,6 +1,8 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
+    maven { url "https://jitpack.io" }
+    maven { url = 'https://maven.brott.dev/' }
 }
 
 dependencies {
@@ -13,5 +15,7 @@ dependencies {
     implementation 'org.firstinspires.ftc:FtcCommon:11.2.1'
     implementation 'org.firstinspires.ftc:Vision:11.2.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "com.github.bouyio:Cyan-FTC:1.5"
+    implementation 'com.acmerobotics.dashboard:dashboard:0.6.0'
 }
 
