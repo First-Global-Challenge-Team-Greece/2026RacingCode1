@@ -22,8 +22,12 @@ public class HardwareMapConfig {
     public static final String LOWER_BRACE_EXTENSION_SENSOR_ID = "lets";
     public static final String WEBCAM_ID = "webcam";
 
+
+    public final static String IMU_ID = "imu";
+
+    // Drive Config
+
     public static final String LEFT_DRIVE_MOTOR_ID = "ldm";
     public static final String RIGHT_DRIVE_MOTOR_ID = "rdm";
 
-    public static final String IMU_ID = "imu";
 }
