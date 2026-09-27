@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Config;
 
 public class HardwareMapConfig {
 
+    public static final String LEFT_SHOOTER_MOTOR_ID = "lsm";
+    public static final String RIGHT_SHOOTER_MOTOR_ID = "rsm";
     public final static String INTAKE_EXTENSION_MOTOR_ID = "iem";
 
     public final static String INTAKE_MOTOR_ID = "im";
